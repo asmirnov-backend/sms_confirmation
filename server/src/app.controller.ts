@@ -1,8 +1,15 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { SmsConfirmParamDto } from './dto/input/sms-confirm.dto';
 
 @Controller()
+@UsePipes(new ValidationPipe({ transform: true }))
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
