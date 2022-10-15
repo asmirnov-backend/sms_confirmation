@@ -1,7 +1,7 @@
 import AuthFromSms from "./pages/AuthFromSms/AuthFromSms";
 
 function App() {
-  return <AuthFromSms></AuthFromSms>;
+  return <AuthFromSms />;
 }
 
 export default App;

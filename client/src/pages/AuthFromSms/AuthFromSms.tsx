@@ -1,29 +1,29 @@
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import {
+  BaseTextFieldProps,
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 import AlertPopup from "../../components/AlertPopup/AlertPopup";
-import { AuthFromSmsParam } from "./auth-from-sms-params.interface";
+import NumericKeypad from "../../components/NumericKeypad";
 
 function AuthFromSms() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors: formErrors },
-  } = useForm<AuthFromSmsParam>();
   const [isCodeCorrect, setIsCodeCorrect] = useState<boolean>();
+  const [code, setCode] = useState<string>("");
+  const [inputColor, setInputColor] =
+    useState<Pick<BaseTextFieldProps, "color">["color"]>("primary");
 
-  const onSubmit = async (params: AuthFromSmsParam) => {
+  const submit = async () => {
     const SERVER_URL = "http://localhost:3005";
     const response = await axios.get<boolean>(
-      `${SERVER_URL}/sms-confirm/${params.code}`
+      `${SERVER_URL}/sms-confirm/${code}`
     );
     setIsCodeCorrect(response.data);
-  };
-
-  const validationCodeLength = {
-    value: 6,
-    message: "Код должен состоять из 6 цифр",
+    response.data === true ? setInputColor("success") : setInputColor("error");
   };
 
   return (
@@ -47,39 +47,27 @@ function AuthFromSms() {
           alignItems: "center",
         }}
       >
-        <Typography variant="h4" align="center">
+        <Typography variant="h5" align="center">
           Введите код из СМС
         </Typography>
-        <Box
-          component="form"
-          noValidate
-          onSubmit={handleSubmit(onSubmit)}
-          sx={{ mt: 1 }}
+        <TextField
+          margin="normal"
+          fullWidth
+          focused
+          placeholder="- - - - - -"
+          value={code}
+          color={inputColor}
+        />
+        <NumericKeypad setterField={setCode} />
+        <Button
+          type="button"
+          onClick={submit}
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
         >
-          <TextField
-            margin="normal"
-            fullWidth
-            label="Code"
-            type="number"
-            focused
-            placeholder="- - - - - - "
-            {...register("code", {
-              required: "Code is required",
-              maxLength: validationCodeLength,
-              minLength: validationCodeLength,
-            })}
-            error={formErrors.code ? true : false}
-            helperText={formErrors.code?.message}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Продолжить
-          </Button>
-        </Box>
+          Продолжить
+        </Button>
       </Box>
     </Container>
   );
