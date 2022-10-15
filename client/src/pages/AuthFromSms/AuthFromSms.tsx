@@ -21,6 +21,11 @@ function AuthFromSms() {
     setIsCodeCorrect(response.data);
   };
 
+  const validationCodeLength = {
+    value: 6,
+    message: "Код должен состоять из 6 цифр",
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <AlertPopup
@@ -56,10 +61,12 @@ function AuthFromSms() {
             fullWidth
             label="Code"
             type="number"
+            focused
+            placeholder="- - - - - - "
             {...register("code", {
               required: "Code is required",
-              maxLength: { value: 6, message: "Код должен состоять из 6 цифр" },
-              minLength: { value: 6, message: "Код должен состоять из 6 цифр" },
+              maxLength: validationCodeLength,
+              minLength: validationCodeLength,
             })}
             error={formErrors.code ? true : false}
             helperText={formErrors.code?.message}
