@@ -14,9 +14,15 @@ describe('AppController', () => {
     appController = app.get<AppController>(AppController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+  describe('authFromSms', () => {
+    it('should return true"', async () => {
+      const result = await appController.authFromSms({ code: 123456 });
+      expect(result).toBe(true);
+    });
+
+    it('should return false"', async () => {
+      const result = await appController.authFromSms({ code: 321 });
+      expect(result).toBe(false);
     });
   });
 });
