@@ -5,14 +5,21 @@ function NumberButton(props: {
   number: string;
   setterField: React.Dispatch<React.SetStateAction<string>>;
 }) {
-  const onClick = () => {
+  const addNumberToTheEnd = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     props.setterField((prev: string) =>
       isUndefined(prev) ? props.number : prev + toString(props.number)
     );
   };
 
   return (
-    <Button variant="outlined" onClick={onClick} size="large" fullWidth>
+    <Button
+      variant="outlined"
+      onClick={addNumberToTheEnd}
+      size="large"
+      fullWidth
+    >
       {props.number}
     </Button>
   );

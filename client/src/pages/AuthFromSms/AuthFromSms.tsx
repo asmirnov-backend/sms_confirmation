@@ -14,6 +14,7 @@ import NumericKeypad from "../../components/NumericKeypad";
 function AuthFromSms() {
   const [isCodeCorrect, setIsCodeCorrect] = useState<boolean>();
   const [code, setCode] = useState<string>("");
+  const [isErrorInServer, setIsErrorInServer] = useState<boolean>(false);
   const [inputColor, setInputColor] =
     useState<Pick<BaseTextFieldProps, "color">["color"]>("primary");
 
@@ -22,8 +23,16 @@ function AuthFromSms() {
     const response = await axios.get<boolean>(
       `${SERVER_URL}/sms-confirm/${code}`
     );
-    setIsCodeCorrect(response.data);
-    response.data === true ? setInputColor("success") : setInputColor("error");
+
+    if (response.status === 200) {
+      setIsCodeCorrect(response.data);
+      response.data === true
+        ? setInputColor("success")
+        : setInputColor("error");
+      setIsErrorInServer(false);
+    } else {
+      setIsErrorInServer(true);
+    }
   };
 
   return (
@@ -37,6 +46,11 @@ function AuthFromSms() {
         severity="error"
         show={isCodeCorrect === false ? true : false}
         text={"Не верный код"}
+      />
+      <AlertPopup
+        severity="error"
+        show={isErrorInServer}
+        text={"Ошибка сервера"}
       />
 
       <Box
@@ -60,7 +74,7 @@ function AuthFromSms() {
         />
         <NumericKeypad setterField={setCode} />
         <Button
-          type="button"
+          type="submit"
           onClick={submit}
           fullWidth
           variant="contained"
