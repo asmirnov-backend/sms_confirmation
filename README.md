@@ -4,6 +4,15 @@
 
 ![result](https://user-images.githubusercontent.com/93443107/195992720-b4f515f4-3137-475a-b48c-a1df16a8cc9c.gif)
 
+## Up all localy
+
+```bush
+cd ./server
+npm run start:dev
+cd ../client
+npm start
+```
+
 ## Task
 
 Есть вот такой экран с авторизацией через SMS. 
